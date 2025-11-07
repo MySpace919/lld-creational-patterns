@@ -1,0 +1,113 @@
+Observer Design Pattern — Notes
+
+1️⃣ Definition
+
+Observer Pattern is a behavioral design pattern that defines a one-to-many dependency between objects —
+so that when one object (the Subject / Observable) changes its state,
+all its dependent objects (Observers) are automatically notified and updated.
+
+2️⃣ Intent
+
+Used when multiple objects need to be notified automatically about changes in another object’s state.
+
+Goal:
+
+Promote loose coupling between the observable and its observers.
+
+Ensure that adding or removing observers doesn’t affect other parts of the system.
+
+3️⃣ Participants
+Role	Responsibility	Example in Your Code
+Observable (Subject)	Holds the core state (e.g., stock count), maintains a list of observers, and notifies them on state change.	StockObservableImpl
+Observer	Subscribes to an observable and defines a custom update() method to react to notifications.	EmailNotificationObserverImpl, SMSNotificationObserverImpl
+Client	Creates the observable and observer objects and wires them together.	Main.java
+
+
+4️⃣ How It Works — Flow
+
+Observers register themselves with an observable.
+
+Observable maintains a list of registered observers.
+
+When the observable’s state changes (e.g., stock update):
+
+It calls notifyObserver().
+
+Each observer’s update() method is triggered.
+
+Observers react to the change (send email, SMS, etc.).
+
+5️⃣ Key Design Principles
+Principle	Explanation
+Loose Coupling	The observable doesn’t need to know how observers handle updates — it just calls update().
+Open/Closed Principle	New observer types (e.g., WhatsAppNotificationObserver) can be added without modifying observable code.
+Single Responsibility Principle	The observable manages state and subscriptions, while observers manage notification logic.
+Encapsulation	Each observer encapsulates its own data (email, phone number, etc.) and behavior.
+
+
+6️⃣ When to Use the Observer Pattern
+
+✅ When multiple components need to react to the same event.
+✅ When the event source and event handlers should be independent.
+✅ Common Real-World Use Cases:
+
+Stock update notification systems
+
+Weather stations broadcasting updates to displays
+
+Chat/messaging systems (listeners receiving messages)
+
+GUI frameworks (button click listeners)
+
+Event-driven backends (Kafka, Event Bus, etc.)
+
+7️⃣ Advantages
+
+✅ Promotes loose coupling between event sources and listeners.
+✅ Easy to add/remove observers at runtime.
+✅ Encourages modular, event-driven architecture.
+✅ Improves scalability and flexibility of the system.
+
+8️⃣ Example Summary (Your Code)
+Component	    Example                     	        Description
+Observable	    StockObservableImpl("iPhone")	    Manages stock count and observer list.
+Observer	    EmailNotificationObserverImpl,
+                SMSNotificationObserverImpl	        React to stock updates.
+Client	        Main.java	                        Creates and connects observables and observers.
+
+Flow:
+
+Observers subscribe to products.
+
+Observable stock changes → calls notifyObserver().
+
+All subscribed observers receive update notifications.
+
+🧩 9️⃣ Quick Visualization
+           +-------------------+
+           |  StockObservable  |  <-- Subject
+           +-------------------+
+           | stockCount        |
+           | observers[]       |
+           +-------------------+
+                     |
+                     | notifyObserver()
+                     ▼
+        +---------------------------+
+        | EmailNotificationObserver |
+        +---------------------------+
+        | email                     |
+        | update() → send email     |
+        +---------------------------+
+                     |
+                     ▼
+        +---------------------------+
+        | SMSNotificationObserver   |
+        +---------------------------+
+        | phoneNumber               |
+        | update() → send SMS       |
+        +---------------------------+
+
+🧩 10️⃣ Key Takeaway
+
+Observer pattern is perfect for building reactive, event-driven systems where multiple components should respond to the same change — without tightly coupling them together.
